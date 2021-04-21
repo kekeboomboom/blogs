@@ -293,7 +293,6 @@ ReferenceAnnotationBeanPostProcessor被删除。
     }
 ```
 
-> add business EventExecutorGroup
 
 nettyServerhandler的使用的线程是可以自定义的。
 
@@ -309,3 +308,10 @@ ch.pipeline().addLast(serviceHandlerGroup, new NettyServerHandler());
 ```
 
 ## 自定义编码解码器
+##  compress
+
+压缩和解压gzip。可以对rpcmessge的内容进行压缩，之后再进行传输。并且此接口是SPI的，仍然允许外界自定义解压。具体使用java的zip包下的类去进行压缩。
+
+在Netty的编解码器中对data进行解压缩。
+
+
