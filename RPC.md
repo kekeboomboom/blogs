@@ -324,11 +324,27 @@ ReferenceAnnotationBeanPostProcessor被删除。
     }
 ```
 
+
+nettyServerhandler的使用的线程是可以自定义的。
+
+```java
+        final DefaultEventExecutorGroup serviceHandlerGroup = new DefaultEventExecutorGroup(
+                RuntimeUtil.cpus() * 2,
+                new NamedThreadFactory("ServiceHandler")
+        );
+
+
+
+ch.pipeline().addLast(serviceHandlerGroup, new NettyServerHandler());
+```
+
+## 自定义编码解码器
 ##  compress
 
 压缩和解压gzip。可以对rpcmessge的内容进行压缩，之后再进行传输。并且此接口是SPI的，仍然允许外界自定义解压。具体使用java的zip包下的类去进行压缩。
 
 在Netty的编解码器中对data进行解压缩。
+
 
 ## 负载均衡
 
@@ -398,3 +414,5 @@ ReferenceAnnotationBeanPostProcessor被删除。
 
 - [ ] zookeeper来做注册中心，还有其他方式么？
 - [ ] 如果要实现一个高效的rpc，注册中心需要做哪些工作呢？
+
+
