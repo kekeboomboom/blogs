@@ -293,3 +293,19 @@ ReferenceAnnotationBeanPostProcessor被删除。
     }
 ```
 
+> add business EventExecutorGroup
+
+nettyServerhandler的使用的线程是可以自定义的。
+
+```java
+        final DefaultEventExecutorGroup serviceHandlerGroup = new DefaultEventExecutorGroup(
+                RuntimeUtil.cpus() * 2,
+                new NamedThreadFactory("ServiceHandler")
+        );
+
+
+
+ch.pipeline().addLast(serviceHandlerGroup, new NettyServerHandler());
+```
+
+## 自定义编码解码器
