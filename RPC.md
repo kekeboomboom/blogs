@@ -345,8 +345,9 @@ ch.pipeline().addLast(serviceHandlerGroup, new NettyServerHandler());
 
 在Netty的编解码器中对data进行解压缩。
 
-
 ## 负载均衡
+
+- [ ] 还有哪些负载均衡的算法？
 
 ### 一致性哈希
 
@@ -416,3 +417,7 @@ ch.pipeline().addLast(serviceHandlerGroup, new NettyServerHandler());
 - [ ] 如果要实现一个高效的rpc，注册中心需要做哪些工作呢？
 
 
+
+## 测试
+
+- [ ] 如何测试我的rpc的效率？？？ 
