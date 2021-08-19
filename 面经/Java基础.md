@@ -226,6 +226,10 @@ public class NIOServer {
 
 
 
+### 抽象类和接口的区别？
+
+[深入理解Java接口h](https://www.cnblogs.com/dolphin0520/p/3811437.html)
+
 ## Java容器
 
 ------
@@ -332,7 +336,7 @@ Java内存模型，每个线程都会又一个本地内存来存储共享变量�
 
 [线程池](https://snailclimb.gitee.io/javaguide/#/./docs/java/multi-thread/java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93?id=%e4%b8%80-%e4%bd%bf%e7%94%a8%e7%ba%bf%e7%a8%8b%e6%b1%a0%e7%9a%84%e5%a5%bd%e5%a4%84)
 
-
+[Java线程池是如何实现线程复用的？ - 简书 (jianshu.com)](https://www.jianshu.com/p/5e952ab2c41b)
 
 ### AQS
 

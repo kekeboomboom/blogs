@@ -4,7 +4,7 @@
 
 redo_log，undo_log，bin_log？
 
-
+[redo_log崩溃恢复](https://cloud.tencent.com/developer/article/1417482#:~:text=%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D.,%E5%B4%A9%E6%BA%83%E6%81%A2%E5%A4%8D%E8%83%BD%E5%8A%9B%E6%98%AF%E6%8C%87InnoDB%E5%8F%AF%E4%BB%A5%E4%BF%9D%E8%AF%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9C%A8%E5%BC%82%E5%B8%B8%E5%B4%A9%E6%BA%83%E9%87%8D%E5%90%AF%E5%90%8E%E7%9A%84%E7%8A%B6%E6%80%81%E5%92%8C%E4%BD%BF%E7%94%A8binlog%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D%E5%87%BA%E6%9D%A5%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E7%8A%B6%E6%80%81%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4%E3%80%82.)
 
 ## MySQL查询
 
@@ -38,7 +38,7 @@ MySQL的主从复制？
 
 [MySQL中的锁（表锁、行锁](https://www.cnblogs.com/chenqionghe/p/4845693.html))
 
-
+[MySQL锁总结](https://zhuanlan.zhihu.com/p/29150809)
 
 ## MySQL事务
 
