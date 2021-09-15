@@ -1,8 +1,8 @@
 我使用的是新版Edge浏览器，右键，点击检查，点击网络，可以看到请求的各种文件。那么以此来看看状态码的使用吧。
 
-### 1xx
+### 101
 
-暂时没看到
+与websocket相关，[websocket在慕课网中的应用 - KeBoom - 博客园 (cnblogs.com)](https://www.cnblogs.com/keboom/p/15184913.html)
 
 ### 200
 
@@ -34,7 +34,7 @@
 
 那么知乎使用预检请求，返回状态码204
 
-知乎还有一个请求https://www.zhihu.com/sc-profiler为post，数据在请求负载（[["i","production.heifetz-column.desktop.all.column.FetchErrorV2.CrossOrigin.https-zhuanlan-zhihu-com.GET.https-www-zhihu-com.H_6.unlimited-vip_rights-popup.count",1,1]]）中，响应码为204，我猜测也是用来分析用户行为的。
+知乎还有一个请求 https://www.zhihu.com/sc-profiler 为post，数据在请求负载（[["i","production.heifetz-column.desktop.all.column.FetchErrorV2.CrossOrigin.https-zhuanlan-zhihu-com.GET.https-www-zhihu-com.H_6.unlimited-vip_rights-popup.count",1,1]]）中，响应码为204，我猜测也是用来分析用户行为的。
 
 
 
@@ -54,9 +54,15 @@
 
 我在第一次访问某篇帖子，这个帖子的作者的最新笔记，建议阅读，音频等等信息会用get请求获取，而这些信息基本是没那么容易变的，对于同一个作者来说这些信息是固定的。第一次访问返回响应码为200
 
-那么我刷新页面，这时我们会看到有很多响应码为304的表示此作者的这些信息没有修改。
+那么我刷新页面，这时我们会看到有很多响应码为304的表示此作者的这些信息没有修改，那么就使用浏览器缓存的数据。
 
 
 
-问题？？为社么我无法看缓存存储？？
+![image-20210825143841899](https://gitee.com/keke518/MarkDownPicture/raw/master/img/20210825143842.png)
+
+可以看到很多304字段的body大小都是0，说明使用的是浏览器缓存的数据，服务端没有传数据过来。注意看这个url，我在清除缓存然后刷新页面，那么这个url的响应码就是200了：
+
+![image-20210825144232274](https://gitee.com/keke518/MarkDownPicture/raw/master/img/20210825144232.png)
+
+可以看到他的响应码为200，并且body为73
 
