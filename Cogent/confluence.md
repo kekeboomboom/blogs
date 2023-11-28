@@ -63,7 +63,4 @@ https://www.cuiwei.net/p/1258785919   -------------这个可用！！！！
 
 
 
-```
-docker run --name postgresql -e POSTGRES_USER=keboom -e POSTGRES_PASSWORD=keboom -p 5432:5432 -v /home/keboom/postgresql:/var/lib/
-postgresql/data -d postgres
-```
+docker run --name postgresql -e POSTGRES_USER=keboom -e POSTGRES_PASSWORD=keboom -p 5432:5432 -v /home/keboom/postgresql:/var/lib/postgresql/data -d postgres
