@@ -122,9 +122,102 @@ jstat可实时查看堆状态。
 
 使用[Arthas](https://arthas.aliyun.com/)也可以监控cpu，内存，gc等情况，具体可参考官方文档。也可参考我的这篇文章[关于使用Arthas排查问题](https://juejin.cn/post/7286750827896963087)
 
+[关于docker中Java应用使用Arthas](https://bedecked-jumbo-3ec.notion.site/GPT-answer-7d331f77126d4c0581ff3c13f317497d?pvs=4)
 
+---
+
+无论使用什么方式获得JVM运行信息，最终我们要得到几组数据，用数据证明我们的调优确实有作用。
+
+
+
+## 关于垃圾收集器
+
+如果是JDK8，那么会有人说CMS是延时低的，Parallel GC等是吞吐量高的。但实际上还要经过测试才能确定。
+
+对于JDK大于8的，比如JDK17等，可以看看G1、ZGC等收集器，测试其是否合适。
+
+[GC progress from JDK 8 to JDK 17](https://kstefanj.github.io/2021/11/24/gc-progress-8-17.html)
+
+## JVM OPTs 样例
+
+-Duser.timezone=Asia/Shanghai 
+-Xms6G -Xmx6G 
+-XX:NewSize=3G -XX:MaxNewSize=3G 
+-XX:SurvivorRatio=10
+-XX:MetaspaceSize=2G -XX:MaxMetaspaceSize=2G
+-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./heapDump.hprof 
+-XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:gc.log
+
+Xms Xmx设置堆大小，两者一样可以避免扩容而导致一定延时
+SurvivorRatio影响幸存者进入老年代的年龄阈值
+MetaspaceSize设置一样可以防止扩容而导致延时
+HeapDumpOnOutOfMemoryError OOM后输出堆快照
+PrintGCDetails .... 打印GClog
+
+
+
+## JVM调优案例
+
+例子大部分来自于《深入理解Java虚拟机》，不说具体例子，只说造成结果
+
+### 大对象直接进入老年代
+
+导致老年代很快内存不够，导致频繁full GC，从而更多的延时
+
+### 内存溢出
+
+大量数据缓存到Java的堆中得不到释放，导致OOM。只要我们开启HeapDumpOnOutOfMemoryError 查看堆信息，基本上就能知道缓存了大量的什么Java对象。
+
+### Direct Memory
+
+我们一看到直接内存就能想到NIO，可以尝试扩大Direct Memory
+
+### 外部命令导致资源占用
+
+Java程序大量调用外部shell脚本
+
+### socket 连接耗尽
+
+发送的http请求，而响应却很慢才返回，导致socket耗尽
+
+### 内存占用过大
+
+数据结构问题，比如我们想查看某个人的一年的出勤率，我们可以看他未出勤的数据。比如我们就是要看一个人365天每一天的是否出勤，那么可以用map存365个key、value，但使用一个365长度的01字符串更节省空间。
+
+### safepoint
+
+文中说JVM对for循环有safepoint，对于for int 的是整个执行完才过safepoint，对于for long的是每一个循环就有safepoint。由于一个for int 执行时间过长导致 STW 过长。
+
+详细可看：[HBase实战：记一次Safepoint导致长时间STW的踩坑之旅](https://juejin.cn/post/6844903878765314061)
 
 
 
 ---
+
+
+
+## 总结
+
+对于JVM调优，我们首先需要知道有什么样的问题，我们调优的目标是什么。一般有三个指标，吞吐量，延时，资源（footprint）。明确我们需要提高哪项指标后，才可进行相应的手段进行优化。
+
+并且还有一个前提条件，那就是对于系统架构和代码层面的优化也做过了，对于数据库相关的优化也做过了，那么我们可以尝试调优JVM来优化相关指标。以为我们不能指望通过调优JVM来大幅提升性能。
+
+仅仅从JVM角度说，如果我们要提高吞吐量，我们可以提高物理机性能，比如多开内存。或者换一个更注重吞吐量的垃圾收集器。当然也可以调节JVM参数来减少垃圾回收次数。
+
+比如我们要减少延时，还是多开内存。或者换一个更注重降低延时的收集器。当然也是可以调节JVM参数减少垃圾回收次数等等。
+
+如果我们要减少资源，如果可以忍受降低程序性能的话。那么我们能做的可能就是调节新生代，老年代比例等，比如我们的应用是朝生夕灭多（调大新生代），还是永久的对象更多（调大老年代）。
+
+
+
+## Reference
+
+[深入理解Java虚拟机：JVM高级特性与最佳实践（第3版）周志明.pdf]: youlink
+[Guide to the Most Important JVM Parameters]: https://www.baeldung.com/jvm-parameters
+[JVM Tuning: How to Prepare Your Environment for Performance Tuning]: https://sematext.com/blog/jvm-performance-tuning/
+[从实际案例聊聊Java应用的GC优化]: https://tech.meituan.com/2017/12/29/jvm-optimize.html
+[How to Properly Plan JVM Performance Tuning]: https://www.alibabacloud.com/blog/how-to-properly-plan-jvm-performance-tuning_594663
+[Solving java.lang.OutOfMemoryError: Metaspace error]: https://www.mastertheboss.com/java/solving-java-lang-outofmemoryerror-metaspace-error/
+[GC progress from JDK 8 to JDK 17]: https://kstefanj.github.io/2021/11/24/gc-progress-8-17.html
+[HBase实战：记一次Safepoint导致长时间STW的踩坑之旅]: https://juejin.cn/post/6844903878765314061
 
